@@ -1,0 +1,309 @@
+SQL>  select job,sum(sal) from emp
+   2 group by job;
+
+
+JOB         SUM(SAL)                                                            
+--------- ----------                                                            
+CLERK           4150                                                            
+SALESMAN        5600                                                            
+PRESIDENT       5000                                                            
+MANAGER         8275                                                            
+ANALYST         6000                                                            
+
+SQL> select hiredate,count(hiredate) from emp
+  2  group by hiredate
+  3  having COUNT(HIREDATE)>=3;
+
+no rows selected
+
+SQL> SELECT DEPTNO,COUNT(*),SUM(SAL) FROM EMP
+  2  GROUP BY DEPTNO
+  3  HAVING COUNT(*)>2 AND SUM(SAL)>9000;
+
+    DEPTNO   COUNT(*)   SUM(SAL)                                                
+---------- ---------- ----------                                                
+        30          6       9400                                                
+        20          5      10875                                                
+
+SQL> SELECT DEPTNO,COUNT(*),AVG(SAL) FROM EMP
+  2  WHERE COMM<SAL
+  3  GROUP BY DEPTNO;
+
+    DEPTNO   COUNT(*)   AVG(SAL)                                                
+---------- ---------- ----------                                                
+        30          3       1450                                                
+
+SQL> SELECT SAL,COUNT(SAL) FROM EMP
+  2  GROUP BY SAL
+  3  HAVING COUNT(SAL)>2;
+
+no rows selected
+
+SQL> SELECT ENAME,COUNT(*) FROM EMP
+  2  GROUP BY ENAME
+  3  HAVING COUNT(*)>1;
+
+no rows selected
+
+SQL>  SELECT SAL,COUNT(SAL) FROM EMP
+  2   GROUP BY SAL
+  3   HAVING COUNT(SAL)>1;
+
+       SAL COUNT(SAL)                                                           
+---------- ----------                                                           
+      1250          2                                                           
+      3000          2                                                           
+
+SQL> SELETC DEPTNO,AVG(SAL) FROM EMP
+SP2-0734: unknown command beginning "SELETC DEP..." - rest of line ignored.
+SQL> ED
+Wrote file afiedt.buf
+
+  1   SELECT SAL,COUNT(SAL) FROM EMP
+  2   GROUP BY SAL
+  3*  HAVING COUNT(SAL)>1
+SQL> SELECT DEPTNO,AVG(SAL) FROM EMP
+  2  GROUP BY DEPTNO
+  3  HAVING AVG(SAL) BETWEEN 2500 AND 3000;
+
+    DEPTNO   AVG(SAL)                                                           
+---------- ----------                                                           
+        10 2916.66667                                                           
+
+SQL> SELECT DEPTNO,COUNT(*),JOB FROM EMP
+  2  WHERE JOB IN('ANALYST','MANAGER') AND SAL*12 LIKE '%0'
+  3  GROUP BY DEPTNO;
+SELECT DEPTNO,COUNT(*),JOB FROM EMP
+                       *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> 
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT DEPTNO,COUNT(*),JOB FROM EMP
+  2  WHERE JOB IN('ANALYST','MANAGER') AND SAL*12 LIKE '%0'
+  3* GROUP BY DEPTNO,JOB
+SQL> /
+
+    DEPTNO   COUNT(*) JOB                                                       
+---------- ---------- ---------                                                 
+        20          1 MANAGER                                                   
+        30          1 MANAGER                                                   
+        10          1 MANAGER                                                   
+        20          2 ANALYST                                                   
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT DEPTNO,COUNT(*) FROM EMP
+  2  WHERE JOB IN('ANALYST','MANAGER') AND SAL*12 LIKE '%0'
+  3* GROUP BY DEPTNO
+SQL> /
+
+    DEPTNO   COUNT(*)                                                           
+---------- ----------                                                           
+        30          1                                                           
+        20          3                                                           
+        10          1                                                           
+
+SQL> SELECT DEPTNO,COUNT(*) FROM EMP
+  2  WHERE JOB='CLERK'
+  3  GROUP BY DEPTNO;
+
+    DEPTNO   COUNT(*)                                                           
+---------- ----------                                                           
+        30          1                                                           
+        20          2                                                           
+        10          1                                                           
+
+SQL> SELECT DEPTNO,MAX(SAL) FROM EMP
+  2  WHERE JOB='MANAGER'
+  3  GROUP BY DEPTNO;
+
+    DEPTNO   MAX(SAL)                                                           
+---------- ----------                                                           
+        30       2850                                                           
+        20       2975                                                           
+        10       2450                                                           
+
+SQL> SELECT SAL,COUNT(*) FROM EMP
+  2  GROUP BY SAL;
+
+       SAL   COUNT(*)                                                           
+---------- ----------                                                           
+      2450          1                                                           
+      5000          1                                                           
+      1300          1                                                           
+      1250          2                                                           
+      2850          1                                                           
+      2975          1                                                           
+      1100          1                                                           
+      3000          2                                                           
+       800          1                                                           
+      1600          1                                                           
+      1500          1                                                           
+
+       SAL   COUNT(*)                                                           
+---------- ----------                                                           
+       950          1                                                           
+
+12 rows selected.
+
+SQL> SET PAGES 200;
+SQL> SET LINES 200;
+SQL> SELECT DEPTNO,COUNT(*) FROM EMP
+  2  WHERE DEPTNO!=10
+  3  GROUP BY DEPTNO;
+
+    DEPTNO   COUNT(*)                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+        30          6                                                                                                                                                                                   
+        20          5                                                                                                                                                                                   
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT DEPTNO,COUNT(*) FROM EMP
+  2  WHERE COMM IS NOT NULL
+  3* GROUP BY DEPTNO
+SQL> /
+
+    DEPTNO   COUNT(*)                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+        30          4                                                                                                                                                                                   
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT DEPTNO,COUNT(*) FROM EMP
+  2  WHERE SAL>1600 AND JOB!='MANAGER'
+  3* GROUP BY DEPTNO
+SQL> /
+
+    DEPTNO   COUNT(*)                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+        20          2                                                                                                                                                                                   
+        10          1                                                                                                                                                                                   
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT DEPTNO,COUNT(*) FROM EMP
+  2  WHERE SAL>1600 AND JOB!='MANAGER'
+  3* GROUP BY DEPTNO
+SQL> SELECT JOB,AVG(SAL) FROM EMP
+  2  WHERE MGR IS NOT NULL
+  3  GROUP BY JOB;
+
+JOB         AVG(SAL)                                                                                                                                                                                    
+--------- ----------                                                                                                                                                                                    
+CLERK         1037.5                                                                                                                                                                                    
+SALESMAN        1400                                                                                                                                                                                    
+MANAGER   2758.33333                                                                                                                                                                                    
+ANALYST         3000                                                                                                                                                                                    
+
+SQL> SELECT HIREDATE,DEPTNO,COUNT(*) FROM EMP
+  2  GROUP BY HIREDATE,DEPTNO;
+
+HIREDATE      DEPTNO   COUNT(*)                                                                                                                                                                         
+--------- ---------- ----------                                                                                                                                                                         
+22-FEB-81         30          1                                                                                                                                                                         
+01-MAY-81         30          1                                                                                                                                                                         
+08-SEP-81         30          1                                                                                                                                                                         
+28-SEP-81         30          1                                                                                                                                                                         
+20-FEB-81         30          1                                                                                                                                                                         
+23-JAN-82         10          1                                                                                                                                                                         
+17-DEC-80         20          1                                                                                                                                                                         
+17-NOV-81         10          1                                                                                                                                                                         
+19-APR-87         20          1                                                                                                                                                                         
+23-MAY-87         20          1                                                                                                                                                                         
+03-DEC-81         20          1                                                                                                                                                                         
+02-APR-81         20          1                                                                                                                                                                         
+09-JUN-81         10          1                                                                                                                                                                         
+03-DEC-81         30          1                                                                                                                                                                         
+
+14 rows selected.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT HIREDATE,DEPTNO,COUNT(*) FROM EMP
+  2* GROUP BY DEPTNO,HIREDATE
+SQL> /
+
+HIREDATE      DEPTNO   COUNT(*)                                                                                                                                                                         
+--------- ---------- ----------                                                                                                                                                                         
+17-NOV-81         10          1                                                                                                                                                                         
+03-DEC-81         20          1                                                                                                                                                                         
+20-FEB-81         30          1                                                                                                                                                                         
+22-FEB-81         30          1                                                                                                                                                                         
+28-SEP-81         30          1                                                                                                                                                                         
+09-JUN-81         10          1                                                                                                                                                                         
+23-MAY-87         20          1                                                                                                                                                                         
+02-APR-81         20          1                                                                                                                                                                         
+19-APR-87         20          1                                                                                                                                                                         
+08-SEP-81         30          1                                                                                                                                                                         
+03-DEC-81         30          1                                                                                                                                                                         
+23-JAN-82         10          1                                                                                                                                                                         
+17-DEC-80         20          1                                                                                                                                                                         
+01-MAY-81         30          1                                                                                                                                                                         
+
+14 rows selected.
+
+SQL> SELECT SAL,DEPTNO,COUNT(*) FROM EMP
+  2  GROUP BY DEPTNO,SAL;
+
+       SAL     DEPTNO   COUNT(*)                                                                                                                                                                        
+---------- ---------- ----------                                                                                                                                                                        
+      5000         10          1                                                                                                                                                                        
+       800         20          1                                                                                                                                                                        
+      2975         20          1                                                                                                                                                                        
+      2450         10          1                                                                                                                                                                        
+      1250         30          2                                                                                                                                                                        
+      3000         20          2                                                                                                                                                                        
+       950         30          1                                                                                                                                                                        
+      1100         20          1                                                                                                                                                                        
+      1300         10          1                                                                                                                                                                        
+      1600         30          1                                                                                                                                                                        
+      2850         30          1                                                                                                                                                                        
+      1500         30          1                                                                                                                                                                        
+
+12 rows selected.
+
+SQL> SELECT JOB,MAX(SAL) FROM EMP
+  2  WHERE ENAME LIKE 'K%'
+  3  GROUP BY JOB;
+
+JOB         MAX(SAL)                                                                                                                                                                                    
+--------- ----------                                                                                                                                                                                    
+PRESIDENT       5000                                                                                                                                                                                    
+
+SQL> SELECT COUNT(*) FROM EMP MGR=7839;
+SELECT COUNT(*) FROM EMP MGR=7839
+                            *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1* SELECT COUNT(*) FROM EMP WHERE MGR=7839
+SQL> /
+
+  COUNT(*)                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+         3                                                                                                                                                                                              
+
+SQL> SELECT ENAME FROM EMP WHERE
+  2  ENAME LIKE 'A%' OR ENAME LIKE 'E%' OR ENAME LIKE 'I%' OR ENAME LIKE 'O%' OR ENAME LIKE 'U%';
+
+ENAME                                                                                                                                                                                                   
+----------                                                                                                                                                                                              
+ALLEN                                                                                                                                                                                                   
+ADAMS                                                                                                                                                                                                   
+
+SQL> SPOOL OFF;

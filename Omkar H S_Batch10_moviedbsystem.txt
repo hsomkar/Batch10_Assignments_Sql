@@ -1,0 +1,72 @@
+delimiter $$
+
+CREATE DATABASE `moviedb` /*!40100 DEFAULT CHARACTER SET utf8 */$$
+
+delimiter $$
+
+CREATE TABLE `actors` (
+  `actorID` int(11) NOT NULL,
+  `firstname` varchar(45) NOT NULL,
+  `lastname` varchar(45) NOT NULL,
+  `nationality` varchar(45) DEFAULT NULL,
+  `birth` year(4) DEFAULT NULL,
+  PRIMARY KEY (`actorID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `directors` (
+  `directorID` int(11) NOT NULL,
+  `firstname` varchar(45) NOT NULL,
+  `lastname` varchar(45) NOT NULL,
+  `nationality` varchar(45) DEFAULT NULL,
+  `birth` year(4) DEFAULT NULL,
+  PRIMARY KEY (`directorID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `genres` (
+  `genreID` int(11) NOT NULL,
+  `genreName` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`genreID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `movieactor` (
+  `movieID` int(11) NOT NULL,
+  `actorID` int(11) NOT NULL,
+  KEY `movieID` (`movieID`),
+  KEY `actorID` (`actorID`),
+  CONSTRAINT `movieactor_ibfk_1` FOREIGN KEY (`movieID`) REFERENCES `movies` (`movieID`),
+  CONSTRAINT `movieactor_ibfk_2` FOREIGN KEY (`actorID`) REFERENCES `actors` (`actorID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `moviegenres` (
+  `movieID` int(11) NOT NULL,
+  `genreID` int(11) NOT NULL,
+  PRIMARY KEY (`movieID`),
+  KEY `genreID` (`genreID`),
+  CONSTRAINT `moviegenres_ibfk_1` FOREIGN KEY (`genreID`) REFERENCES `genres` (`genreID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+
+delimiter $$
+
+CREATE TABLE `movies` (
+  `movieID` int(11) NOT NULL,
+  `directorID` int(11) NOT NULL,
+  `genreID` int(11) NOT NULL,
+  `title` varchar(45) NOT NULL,
+  `releaseyear` year(4) DEFAULT NULL,
+  `rating` int(11) DEFAULT NULL,
+  `plot` varchar(80) DEFAULT NULL,
+  `length` int(11) DEFAULT NULL,
+  KEY `movieID` (`movieID`),
+  KEY `directorID` (`directorID`),
+  CONSTRAINT `movies_ibfk_1` FOREIGN KEY (`movieID`) REFERENCES `moviegenres` (`movieID`),
+  CONSTRAINT `movies_ibfk_2` FOREIGN KEY (`directorID`) REFERENCES `directors` (`directorID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8$$
+

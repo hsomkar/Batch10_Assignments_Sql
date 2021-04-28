@@ -1,0 +1,344 @@
+SQL> SELECT ENAME,JOB,SAL*12 ANNUAL_SAL,EMP.DEPTNO,DNAME FROM EMP
+  2  JOIN DEPT ON EMP.DEPTNO=DEPT.DEPTNO WHERE SAL*12=3000 AND JOB!='CLERK';
+
+no rows selected
+
+SQL> SELECT E1.ENAME,E1.EMPNO,E2.ENAME,E2.EMPNO FROM EMP E1,EMP E2
+  2  WHERE E1.MGR=E2.EMPNO;
+
+ENAME           EMPNO ENAME           EMPNO                                                                                                                                                             
+---------- ---------- ---------- ----------                                                                                                                                                             
+SMITH            7369 FORD             7902                                                                                                                                                             
+ALLEN            7499 BLAKE            7698                                                                                                                                                             
+WARD             7521 BLAKE            7698                                                                                                                                                             
+JONES            7566 KING             7839                                                                                                                                                             
+MARTIN           7654 BLAKE            7698                                                                                                                                                             
+BLAKE            7698 KING             7839                                                                                                                                                             
+CLARK            7782 KING             7839                                                                                                                                                             
+SCOTT            7788 JONES            7566                                                                                                                                                             
+TURNER           7844 BLAKE            7698                                                                                                                                                             
+ADAMS            7876 SCOTT            7788                                                                                                                                                             
+JAMES            7900 BLAKE            7698                                                                                                                                                             
+FORD             7902 JONES            7566                                                                                                                                                             
+MILLER           7934 CLARK            7782                                                                                                                                                             
+
+13 rows selected.
+
+SQL> SELECT ENAME,DNAME FROM EMP
+  2  RIGHT OUTER JOIN DEPT ON EMP.DEPTNO=DEPT.DEPTNO
+  3  WHERE ENAME IS NULL;
+
+ENAME      DNAME                                                                                                                                                                                        
+---------- --------------                                                                                                                                                                               
+           OPERATIONS                                                                                                                                                                                   
+
+SQL> SELECT DNAME,SUM(SAL) FROM EMP
+  2  JOIN DEPT
+  3  ON EMP.DEPTNO=EMP.DEPTNO
+  4  GROUP BY DNAME;
+
+DNAME            SUM(SAL)                                                                                                                                                                               
+-------------- ----------                                                                                                                                                                               
+ACCOUNTING          29025                                                                                                                                                                               
+OPERATIONS          29025                                                                                                                                                                               
+RESEARCH            29025                                                                                                                                                                               
+SALES               29025                                                                                                                                                                               
+
+SQL> SELECT ENAME,DNAME FROM EMP
+  2  JOIN DEPT ON DEPT.DEPTNO=EMP.DEPTNO;
+
+ENAME      DNAME                                                                                                                                                                                        
+---------- --------------                                                                                                                                                                               
+SMITH      RESEARCH                                                                                                                                                                                     
+ALLEN      SALES                                                                                                                                                                                        
+WARD       SALES                                                                                                                                                                                        
+JONES      RESEARCH                                                                                                                                                                                     
+MARTIN     SALES                                                                                                                                                                                        
+BLAKE      SALES                                                                                                                                                                                        
+CLARK      ACCOUNTING                                                                                                                                                                                   
+SCOTT      RESEARCH                                                                                                                                                                                     
+KING       ACCOUNTING                                                                                                                                                                                   
+TURNER     SALES                                                                                                                                                                                        
+ADAMS      RESEARCH                                                                                                                                                                                     
+JAMES      SALES                                                                                                                                                                                        
+FORD       RESEARCH                                                                                                                                                                                     
+MILLER     ACCOUNTING                                                                                                                                                                                   
+
+14 rows selected.
+
+SQL> SELECT LOC FROM DEPT
+  2  JOIN EMP ON EMP.DEPTNO=DEPT.DEPTNO
+  3  WHERE COMM IS NOT NULL;
+
+LOC                                                                                                                                                                                                     
+-------------                                                                                                                                                                                           
+CHICAGO                                                                                                                                                                                                 
+CHICAGO                                                                                                                                                                                                 
+CHICAGO                                                                                                                                                                                                 
+CHICAGO                                                                                                                                                                                                 
+
+SQL> SELECT DNAME FROM DEPT
+  2  JOIN EMP ON EMP.DEPTNO=DEPT.DEPTNO
+  3  WHERE MGR IS NULL AND SAL IN (SELECT MIN(SAL) FROM EMP WHERE MGR IS NULL);
+
+DNAME                                                                                                                                                                                                   
+--------------                                                                                                                                                                                          
+ACCOUNTING                                                                                                                                                                                              
+
+SQL> SELECT DNAME,LOC FROM DEPT
+  2  JOIN EMP ON EMP.DEPTNO=DEPT.DEPTNO;;
+JOIN EMP ON EMP.DEPTNO=DEPT.DEPTNO;
+                                  *
+ERROR at line 2:
+ORA-00911: invalid character 
+
+
+SQL> SELECT DNAME,LOC FROM EMP E1,EMP E2,DEPT D
+  2  WHERE E1.ENAME='SMITH'
+  3  AND E1.EMPNO=E2.MGR
+  4  AND E2.DEPTNO=D.DEPTNO;
+
+no rows selected
+
+SQL> SELECT DNAME,LOC FROM EMP E1,EMP E2,EMP E3, DEPT D WHERE E1.;;
+SELECT DNAME,LOC FROM EMP E1,EMP E2,EMP E3, DEPT D WHERE E1.;
+                                                            *
+ERROR at line 1:
+ORA-00911: invalid character 
+
+
+SQL> SELECT DNAME,LOC
+  2   FROM EMP E1 , EMP E2 , EMP E3 , DEPT D
+  3   WHERE E1.JOB=‘SALESMAN’
+  4   AND E1.MGR=E2.EMPNO
+  5   AND E2.MGR = E3.EMPNO
+  6   AND E3.DEPTNO=D.DEPTNO;
+
+
+DNAME          LOC                                                                                                                                                                                      
+-------------- -------------                                                                                                                                                                            
+ACCOUNTING     NEW YORK                                                                                                                                                                                 
+ACCOUNTING     NEW YORK                                                                                                                                                                                 
+ACCOUNTING     NEW YORK                                                                                                                                                                                 
+ACCOUNTING     NEW YORK                                                                                                                                                                                 
+
+SQL> SELECT ENAME
+  2   FROM EMP E,DEPT D
+  3   WHERE E.DEPTNO=D.DEPTNO
+  4   AND DNAME=’RESEARCH’ AND JOB=’MANAGER’;
+
+
+ENAME                                                                                                                                                                                                   
+----------                                                                                                                                                                                              
+JONES                                                                                                                                                                                                   
+
+SQL> SELECT COUNT(E3.EMPNO)
+  2   FROM EMP E1,EMP E2,EMP E3
+  3   WHERE E1.ENAME=‘BLAKE’
+  4   AND E1.MGR = E2.EMPNO
+  5   AND E3.SAL < E2.SAL;
+
+
+COUNT(E3.EMPNO)                                                                                                                                                                                         
+---------------                                                                                                                                                                                         
+             13                                                                                                                                                                                         
+
+SQL> SELECT DNAME,LOC
+  2   FROM EMP E1 , EMP E2 , DEPT D
+  3   WHERE E1.ENAME= ‘BLAKE’
+  4   AND E1.EMPNO=E2.MGR
+  5   AND E2.JOB=‘ANALYST’
+  6   AND E2.DEPTNO=D.DEPTNO;
+
+
+no rows selected
+
+SQL> SELECT ENAME,HIREDATE,COMM
+  2   FROM EMP E1,EMP E2
+  3   WHERE E1.MGR=E2.EMPNO
+  4   AND E1.ENAME=’FORD’;
+
+
+ENAME      HIREDATE        COMM                                                                                                                                                                         
+---------- --------- ----------                                                                                                                                                                         
+FORD       03-DEC-81                                                                                                                                                                                    
+
+SQL> SELECT ENAME,DNAME
+  2   FROM EMP E,DEPT D
+  3   WHERE E.DEPTNO=D.DEPTNO
+  4   AND SAL<(SELECT AVG(SAL) FROM EMP WHERE DEPTNO=30);
+
+ENAME      DNAME                                                                                                                                                                                        
+---------- --------------                                                                                                                                                                               
+SMITH      RESEARCH                                                                                                                                                                                     
+WARD       SALES                                                                                                                                                                                        
+MARTIN     SALES                                                                                                                                                                                        
+TURNER     SALES                                                                                                                                                                                        
+ADAMS      RESEARCH                                                                                                                                                                                     
+JAMES      SALES                                                                                                                                                                                        
+MILLER     ACCOUNTING                                                                                                                                                                                   
+
+7 rows selected.
+
+SQL> SELECT E2.ENAME,DNAME,LOC
+  2   FROM EMP E1 ,DEPT D,EMP E2
+  3   WHERE E2.DEPTNO=D.DEPTNO
+  4   AND E1.EMPNO=E2.MGR
+  5   AND E1.ENAME=’JONES’;
+
+
+ENAME      DNAME          LOC                                                                                                                                                                           
+---------- -------------- -------------                                                                                                                                                                 
+SCOTT      RESEARCH       DALLAS                                                                                                                                                                        
+FORD       RESEARCH       DALLAS                                                                                                                                                                        
+
+SQL> SELECT ENAME,DNAME
+  2   FROM EMP E,DEPT D
+  3   WHERE E.DEPTNO=D.DEPTNO AND E.ENAME LIKE ‘S%’;
+
+
+ENAME      DNAME                                                                                                                                                                                        
+---------- --------------                                                                                                                                                                               
+SMITH      RESEARCH                                                                                                                                                                                     
+SCOTT      RESEARCH                                                                                                                                                                                     
+
+SQL> SELECT DNAME
+  2   FROM EMP RIGHT OUTER JOIN DEPT
+  3   ON EMP.DEPTNO=DEPT.DEPTNO
+  4   WHERE ENAME IS NULL;
+
+DNAME                                                                                                                                                                                                   
+--------------                                                                                                                                                                                          
+OPERATIONS                                                                                                                                                                                              
+
+SQL> SELECT E1. ENAME,E2.ENAME,E1.COMM,E2.COMM
+  2   FROM EMP E1,EMP E2
+  3   WHERE E1.COMM=E2.COMM
+  4   AND E1.EMPNO<>E2.EMPNO;
+
+no rows selected
+
+SQL> SELECT DNAME
+  2   FROM EMP E FULL OUTER JOIN DEPT D
+  3  ON E.DEPTNO=D.DEPTNO
+  4  WHERE ENAME IS NULL;
+
+DNAME                                                                                                                                                                                                   
+--------------                                                                                                                                                                                          
+OPERATIONS                                                                                                                                                                                              
+
+SQL> SELECT ENAME,JOB,DNAME,LOC
+  2   FROM EMP E ,DEPT D
+  3   WHERE E.DEPTNO=D.DEPTNO
+  4   AND JOB=’MANAGER’
+  5   AND LOC=’CHICAGO’;
+
+
+ENAME      JOB       DNAME          LOC                                                                                                                                                                 
+---------- --------- -------------- -------------                                                                                                                                                       
+BLAKE      MANAGER   SALES          CHICAGO                                                                                                                                                             
+
+SQL> SELECT DNAME
+  2   FROM EMP E,DEPT D
+  3   WHERE E.DEPTNO=D.DEPTNO
+  4   AND HIREDATE BETWEEN ’01-JAN-81’ AND ’31-DEC-82’
+  5   AND SAL>1800;
+
+
+DNAME                                                                                                                                                                                                   
+--------------                                                                                                                                                                                          
+RESEARCH                                                                                                                                                                                                
+SALES                                                                                                                                                                                                   
+ACCOUNTING                                                                                                                                                                                              
+ACCOUNTING                                                                                                                                                                                              
+RESEARCH                                                                                                                                                                                                
+
+SQL> SELECT MIN(E1.SAL)
+  2   FROM EMP E1 , EMP E2
+  3   WHERE E1.SAL > E2.SAL ;
+
+MIN(E1.SAL)                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+        950                                                                                                                                                                                             
+
+SQL> SELECT ENAME
+  2   FROM EMP
+  3   WHERE SAL*12>1500
+  4   AND HIREDATE <’01-JAN-82’;
+
+
+ENAME                                                                                                                                                                                                   
+----------                                                                                                                                                                                              
+SMITH                                                                                                                                                                                                   
+ALLEN                                                                                                                                                                                                   
+WARD                                                                                                                                                                                                    
+JONES                                                                                                                                                                                                   
+MARTIN                                                                                                                                                                                                  
+BLAKE                                                                                                                                                                                                   
+CLARK                                                                                                                                                                                                   
+KING                                                                                                                                                                                                    
+TURNER                                                                                                                                                                                                  
+JAMES                                                                                                                                                                                                   
+FORD                                                                                                                                                                                                    
+
+11 rows selected.
+
+SQL> SELECT DISTINCT DNAME,LOC,D.DEPTNO
+  2   FROM EMP E1 ,DEPT D,EMP E2
+  3   WHERE E1.DEPTNO=D.DEPTNO
+  4   AND E1.MGR=E2.MGR
+  5   AND E1.EMPNO<>E2.EMPNO;
+
+DNAME          LOC               DEPTNO                                                                                                                                                                 
+-------------- ------------- ----------                                                                                                                                                                 
+RESEARCH       DALLAS                20                                                                                                                                                                 
+ACCOUNTING     NEW YORK              10                                                                                                                                                                 
+SALES          CHICAGO               30                                                                                                                                                                 
+
+SQL> SELECT E1.ENAME,E2.ENAME
+  2  FROM EMP E1,EMP E2
+  3  WHERE E1.MGR=E2.EMPNO;
+
+ENAME      ENAME                                                                                                                                                                                        
+---------- ----------                                                                                                                                                                                   
+SMITH      FORD                                                                                                                                                                                         
+ALLEN      BLAKE                                                                                                                                                                                        
+WARD       BLAKE                                                                                                                                                                                        
+JONES      KING                                                                                                                                                                                         
+MARTIN     BLAKE                                                                                                                                                                                        
+BLAKE      KING                                                                                                                                                                                         
+CLARK      KING                                                                                                                                                                                         
+SCOTT      JONES                                                                                                                                                                                        
+TURNER     BLAKE                                                                                                                                                                                        
+ADAMS      SCOTT                                                                                                                                                                                        
+JAMES      BLAKE                                                                                                                                                                                        
+FORD       JONES                                                                                                                                                                                        
+MILLER     CLARK                                                                                                                                                                                        
+
+13 rows selected.
+
+SQL> SELECT E1.ENAME,D.DNAME
+  2   FROM EMP E1,DEPT D
+  3   WHERE E1.DEPTNO=D.DEPTNO
+  4   AND E1.ENAME LIKE ‘S%’;
+
+
+ENAME      DNAME                                                                                                                                                                                        
+---------- --------------                                                                                                                                                                               
+SMITH      RESEARCH                                                                                                                                                                                     
+SCOTT      RESEARCH                                                                                                                                                                                     
+
+SQL> SELECT E1.ENAME
+  2   FROM EMP E1,EMP E2
+  3   WHERE E1.SAL=E2.SAL
+  4   AND E1.EMPNO!=E2.EMPNO;
+
+ENAME                                                                                                                                                                                                   
+----------                                                                                                                                                                                              
+MARTIN                                                                                                                                                                                                  
+WARD                                                                                                                                                                                                    
+FORD                                                                                                                                                                                                    
+SCOTT                                                                                                                                                                                                   
+
+SQL> spool off
+
